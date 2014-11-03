@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vdb name="Movies" version="1">
+
+    <description>Shows how to call an Infinispan local cache</description>
+
+    <property name="UseConnectorMetadata" value="cached" />
+    <model name="Movies" visible="false">
+        <source name="objsource" translator-name="infinispan1" connection-jndi-name="java:/moviesDS" />
+        <metadata type="DDL"><![CDATA[
+            CREATE FOREIGN TABLE Movies (EntryObject Object OPTIONS (NAMEINSOURCE 'this', SEARCHABLE 'Unsearchable')) OPTIONS (NAMEINSOURCE 'movies') ;
+         ]]> </metadata>
+    </model>
+    <model name="MoviesView" type="VIRTUAL">
+        <metadata type="DDL"><![CDATA[
+            CREATE VIEW MoviesView (
+              ID string  PRIMARY KEY,
+              TITLE string,
+              PUBLISHED string,
+              SYNOPSIS string,
+              RATING string,
+              ACTORS string,
+              DIRECTORS string,
+              GENRES string
+            )
+            AS
+              SELECT o.ID, o.TITLE, o.PUBLISHED, o.SYNOPSIS, o.RATING, o.ACTORS, o.DIRECTORS, o.GENRES
+            FROM Movies as T, OBJECTTABLE( 'x' PASSING T.EntryObject AS x COLUMNS
+              ID string 'teiid_row.id', TITLE string 'teiid_row.title', PUBLISHED string 'teiid_row.year',
+              SYNOPSIS string 'teiid_row.synopsis', RATING string 'teiid_row.rating', ACTORS string 'teiid_row.actors',
+              DIRECTORS string 'teiid_row.directors', GENRES string 'teiid_row.genres') as o;
+
+        ]]> </metadata>
+    </model>
+    <translator name="infinispan1" type="infinispan-cache">
+        <property name="SupportsLuceneSearching" value="false"/>
+    </translator>
+</vdb>
