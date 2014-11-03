@@ -38,6 +38,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 
+import org.belaran.redhat.youblockbuster.AccessMovieCounterListener;
 import org.belaran.redhat.youblockbuster.Movie;
 import org.belaran.redhat.youblockbuster.MovieUtils;
 import org.belaran.redhat.youblockbuster.Movies;
@@ -81,6 +82,9 @@ public class MoviesRestWS {
     	Cache<String,Query> queriesImplCache = getQueryImplMap();
 		for ( Query query : ComparatorFactory.buildQueries() )
 			queriesImplCache.put(query.getClass().getSimpleName(), query);
+
+		Cache<String,Integer> statsCache = manager.getCache();
+		manager.getCache(MOVIES_CACHE_NAME).addListener(new AccessMovieCounterListener(statsCache));
     }
 
     @GET

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.belaran.redhat.youblockbuster.ws.MovieWrapper;
+
 public class MovieUtils {
 
 	private MovieUtils() {}
@@ -63,5 +65,9 @@ public class MovieUtils {
 		for ( Movie movie : unindexedMovies)
 			movies.put(movie.getId(), movie);
 		return movies;
+	}
+
+	public static boolean movieUpdated(MovieWrapper movie) {
+		return true;
 	}
 }

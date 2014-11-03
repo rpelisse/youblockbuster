@@ -19,7 +19,7 @@ import org.belaran.redhat.youblockbuster.Movie;
 public class MovieWrapper {
 
 	private Movie movie = new Movie();
-	
+
 	public MovieWrapper() {
 		movie.setDirectors(new ArrayList<Director>());
 		movie.setActors(new ArrayList<Actor>());
@@ -135,8 +135,12 @@ public class MovieWrapper {
 	public boolean equals(Object obj) {
 		return movie.equals(obj);
 	}
-	
+
 	public Movie returnAsMovieInstance() {
 		return movie;
+	}
+
+	public void setReadAvailable(boolean b) {
+
 	}
 }
